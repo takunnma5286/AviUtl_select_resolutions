@@ -1,0 +1,27 @@
+// mydialog.rc
+#include <windows.h>
+#include "resource.h"
+
+IDC_NEW_FILE_ALT DIALOGEX 0, 0, 200, 160
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "新規プロジェクトの作成"
+FONT 9, "MS UI Gothic"
+BEGIN
+    LTEXT           "幅 (Width):",      -1, 10, 10,  50, 10
+    EDITTEXT        IDC_WIDTH_EDIT,         70, 10,  60, 12, ES_NUMBER
+
+    LTEXT           "高さ (Height):",   -1, 10, 30,  50, 10
+    EDITTEXT        IDC_HEIGHT_EDIT,        70, 30,  60, 12, ES_NUMBER
+
+    LTEXT           "FPS:",             -1, 10, 50,  50, 10
+    EDITTEXT        IDC_FPS_EDIT,           70, 50,  60, 12
+
+    LTEXT           "Hz:",              -1, 10, 70,  50, 10
+    EDITTEXT        IDC_HZ_EDIT,            70, 70,  60, 12, ES_NUMBER
+
+    LTEXT           "解像度プリセット:", -1, 10, 90, 70, 10
+    COMBOBOX        IDC_RESOLUTION_COMBO,   10, 100, 180, 100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+
+    DEFPUSHBUTTON   "OK",               IDC_OK_BUTTON,      40, 130, 50, 14
+    PUSHBUTTON      "キャンセル",       IDC_CANCEL_BUTTON, 100, 130, 50, 14
+END
