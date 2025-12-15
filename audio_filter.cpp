@@ -115,14 +115,17 @@ INT_PTR CALLBACK CustomDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 		hCombo = GetDlgItem(hDlg, IDC_RESOLUTION_COMBO);
 
 		resolutions_ini = LoadResolutionsFromFile("resolutions.ini");
+		printf("toutatu !");
 		SendMessageA(hCombo, CB_ADDSTRING, 0, (LPARAM)"costom");
         for (size_t i = 0; i < 128; ++i) {  
 			if (resolutions_ini[i].width <= 0 && resolutions_ini[i].height <= 0) break;
 			if (resolutions_ini[i].comment == "unload") break;
+			printf("toutatu !");
             char buf[128];
-            snprintf(buf, sizeof(buf), "%d x %d %s",  
-                    (resolutions_ini[i].width),  
-                    (resolutions_ini[i].height),  
+            snprintf(buf, sizeof(buf), "%d x %d %sfps %s",  
+                    (resolutions_ini[i].width),
+                    (resolutions_ini[i].height),
+					(resolutions_ini[i].fps).c_str(),
                     (resolutions_ini[i].comment).c_str());
             SendMessageA(hCombo, CB_ADDSTRING, 0, (LPARAM)buf);  
         }
@@ -138,6 +141,7 @@ INT_PTR CALLBACK CustomDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 			// printf("解像度選択: %d", index);
 			DWORD width = GetDlgItemInt(hDlg, IDC_WIDTH_EDIT, NULL, FALSE);
 			DWORD height = GetDlgItemInt(hDlg, IDC_HEIGHT_EDIT, NULL, FALSE);
+			char fps = GetDlgItemText(hDlg, IDC_FPS_EDIT, NULL, FALSE);
 
 			/* 数字入力欄自体も更新するようにしたためコメントアウト
 			if ((index != 0 || index != -1)){ //costom または 無効 ではない
@@ -161,6 +165,7 @@ INT_PTR CALLBACK CustomDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 					*pWidth = width;
 					*pheight = height;
 					*phz = Hz;
+					*pfps = fps;
 					strncpy_s(pfps, 64, fpsBuffer, _TRUNCATE); // 最大64文字までコピー
 				}
 			}
@@ -176,6 +181,7 @@ INT_PTR CALLBACK CustomDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 			} else if (index > 0 && resolutions_ini) {
 				SetDlgItemInt(hDlg, IDC_WIDTH_EDIT, resolutions_ini[index - 1].width, FALSE);
 				SetDlgItemInt(hDlg, IDC_HEIGHT_EDIT, resolutions_ini[index - 1].height, FALSE);
+				SetDlgItemTextA(hDlg, IDC_FPS_EDIT, resolutions_ini[index - 1].fps.c_str());
 			}
 			return TRUE;
 		}

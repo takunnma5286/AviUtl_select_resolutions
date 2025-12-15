@@ -7,15 +7,17 @@
 
 
 
-resolution_info::resolution_info(int w, int h, const std::string& c) {
+resolution_info::resolution_info(int w, int h, const std::string& f, const std::string& c) {
     width = w;
     height = h;
+    fps = f;
     comment = c;
 }
 
 resolution_info::resolution_info() {
 	width = 0;
 	height = 0;
+    fps = "0";
 	comment = "unload";
 }
 
@@ -31,10 +33,10 @@ resolution_info* LoadResolutionsFromFile(const char* filename) {
     if (!file.is_open()) {
         std::ofstream outfile(filename);
         if (outfile) {
-            outfile << "1280,720,HD 60fps" << std::endl;
-            outfile << "1920,1080,FHD 60fps" << std::endl;
-            outfile << "1280,720,HD 66fps" << std::endl;
-            outfile << "1920,1080,FHD 66fps" << std::endl;
+            outfile << "1280,720,60,HD 60fps" << std::endl;
+            outfile << "1920,1080,60,FHD 60fps" << std::endl;
+            outfile << "1280,720,66,HD 66fps" << std::endl;
+            outfile << "1920,1080,66,FHD 66fps" << std::endl;
             outfile.close();
             file.open(filename);
         }
@@ -52,9 +54,9 @@ resolution_info* LoadResolutionsFromFile(const char* filename) {
         if (line.empty() || line[0] == '#') continue;
 
         std::istringstream iss(line);
-        std::string widthStr, heightStr, commentStr;
+        std::string widthStr, heightStr, fpsStr, commentStr;
 
-        if (std::getline(iss, widthStr, ',') && std::getline(iss, heightStr, ',') && std::getline(iss, commentStr) && count < 128) {
+        if (std::getline(iss, widthStr, ',') && std::getline(iss, heightStr, ',') && std::getline(iss, fpsStr, ',') && std::getline(iss, commentStr) && count < 128) {
             int width;
             int height;
             try {
@@ -69,8 +71,9 @@ resolution_info* LoadResolutionsFromFile(const char* filename) {
 				// std::cerr << "数値が範囲外: " << widthStr << ", " << heightStr << std::endl;
 				continue;
 			}
+            std::string fps = fpsStr;
             std::string comment = commentStr; // いらないけど、、、。
-			resolutions[count] = resolution_info(width, height, comment);
+			resolutions[count] = resolution_info(width, height, fps, comment);
             count++;
         }
     }
