@@ -29,6 +29,18 @@ resolution_info* LoadResolutionsFromFile(const char* filename) {
     std::ifstream file(filename);
 
     if (!file.is_open()) {
+        std::ofstream outfile(filename);
+        if (outfile) {
+            outfile << "1280,720,HD 60fps" << std::endl;
+            outfile << "1920,1080,FHD 60fps" << std::endl;
+            outfile << "1280,720,HD 66fps" << std::endl;
+            outfile << "1920,1080,FHD 66fps" << std::endl;
+            outfile.close();
+            file.open(filename);
+        }
+    }
+
+    if (!file.is_open()) {
         // std::cerr << "ファイルを開けませんでした: " << filename << std::endl;
         return resolutions;
     }
